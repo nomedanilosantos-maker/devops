@@ -13,11 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run with environment variables and secrets
-        env:
-          APP_ENV: ${{ secrets.APP_ENV }}
-          APP_NAME: devops-lab
+      - name: Build artefact
         run: |
-          echo "Aplicação: $APP_NAME"
-          echo "Ambiente: $APP_ENV"
-          echo "Pipeline seguro em execução"
+          mkdir -p build
+          echo "Build gerado em $(date)" > build/info.txt
+          ls -l build
+
+      - name: Upload artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: devops-build
+          path: build/
