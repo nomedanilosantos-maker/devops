@@ -13,8 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run basic commands
+      - name: Run with environment variables and secrets
+        env:
+          APP_ENV: ${{ secrets.APP_ENV }}
+          APP_NAME: devops-lab
         run: |
-          echo "CI pipeline a correr com sucesso"
-          uname -a
-          ls -l
+          echo "Aplicação: $APP_NAME"
+          echo "Ambiente: $APP_ENV"
+          echo "Pipeline seguro em execução"
