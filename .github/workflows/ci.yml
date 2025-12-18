@@ -24,11 +24,11 @@ jobs:
           name: devops-build
           path: build/
 
-  deploy:
+  deploy-dev:
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: dev   # 👈 DEV não precisa aprovação
 
     steps:
       - name: Download artefact
@@ -37,8 +37,27 @@ jobs:
           name: devops-build
           path: build/
 
-      - name: Simulated deploy
+      - name: Deploy to DEV
         run: |
-          echo "A iniciar deploy em PRODUÇÃO"
+          echo "Deploy automático em DEV"
           cat build/info.txt
-          echo "Deploy concluído com sucesso"
+          echo "Deploy DEV concluído"
+
+  deploy-prod:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment:
+      name: production   # 👈 PROD exige aprovação
+
+    steps:
+      - name: Download artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: devops-build
+          path: build/
+
+      - name: Deploy to PROD
+        run: |
+          echo "Deploy em PRODUÇÃO (com aprovação)"
+          cat build/info.txt
+          echo "Deploy PROD concluído"
