@@ -1,4 +1,4 @@
-name: CI DevOps Lab
+name: CI/CD DevOps Lab
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create build artefact
+      - name: Build artefact
         run: |
           mkdir -p build
           echo "Build gerado em $(date)" > build/info.txt
@@ -23,3 +23,66 @@ jobs:
         with:
           name: devops-build
           path: build/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+
+    steps:
+      - name: Download artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: devops-build
+          path: build/
+
+      - name: Simulated deploy
+        run: |
+          echo "A iniciar deploy em PRODUÇÃO"
+          cat build/info.txt
+          echo "Deploy concluído com sucesso"
+name: CI/CD DevOps Lab
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build artefact
+        run: |
+          mkdir -p build
+          echo "Build gerado em $(date)" > build/info.txt
+
+      - name: Upload artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: devops-build
+          path: build/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+
+    steps:
+      - name: Download artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: devops-build
+          path: build/
+
+      - name: Simulated deploy
+        run: |
+          echo "A iniciar deploy em PRODUÇÃO"
+          cat build/info.txt
+          echo "Deploy concluído com sucesso"
