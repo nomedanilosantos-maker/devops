@@ -27,37 +27,21 @@ jobs:
   deploy-dev:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: dev   # 👈 DEV não precisa aprovação
+    environment: dev
 
     steps:
-      - name: Download artefact
-        uses: actions/download-artifact@v4
-        with:
-          name: devops-build
-          path: build/
-
       - name: Deploy to DEV
         run: |
-          echo "Deploy automático em DEV"
-          cat build/info.txt
-          echo "Deploy DEV concluído"
+          echo "Deploy em DEV iniciado"
+          echo "Deploy DEV concluído com sucesso"
 
   deploy-prod:
     needs: deploy-dev
     runs-on: ubuntu-latest
-    environment:
-      name: production   # 👈 PROD exige aprovação
+    environment: prod
 
     steps:
-      - name: Download artefact
-        uses: actions/download-artifact@v4
-        with:
-          name: devops-build
-          path: build/
-
       - name: Deploy to PROD
         run: |
-          echo "Deploy em PRODUÇÃO (com aprovação)"
-          cat build/info.txt
-          echo "Deploy PROD concluído"
+          echo "Deploy em PRODUÇÃO iniciado"
+          echo "Deploy PRODUÇÃO concluído com sucesso"
